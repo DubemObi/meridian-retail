@@ -1,0 +1,104 @@
+# docker-compose.yml
+# Meridian Retail Group — Beginner DevOps Project
+#
+# Note: Nginx runs on the HOST (installed via apt), not in this Compose
+# stack. This is intentional — Phase 1 of this project teaches reverse
+# proxy configuration directly on the VPS, which is the most common
+# pattern junior DevOps engineers encounter before learning containerised
+# reverse proxies (covered in the Project 2 / Northbridge Commerce track).
+#
+# Services are published to host ports so the host Nginx can proxy_pass
+# to 127.0.0.1:<port>.
+
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: meridian-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: meridian_db
+      POSTGRES_USER: meridian
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-meridian_dev}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"   # bound to localhost only — never exposed publicly
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U meridian -d meridian_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  auth-service:
+    build: ./auth-service
+    container_name: meridian-auth
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://meridian:${POSTGRES_PASSWORD:-meridian_dev}@postgres:5432/meridian_db
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+    ports:
+      - "127.0.0.1:8001:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz')"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  catalog-service:
+    build: ./catalog-service
+    container_name: meridian-catalog
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://meridian:${POSTGRES_PASSWORD:-meridian_dev}@postgres:5432/meridian_db
+    ports:
+      - "127.0.0.1:8002:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4000/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  orders-service:
+    build: ./orders-service
+    container_name: meridian-orders
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://meridian:${POSTGRES_PASSWORD:-meridian_dev}@postgres:5432/meridian_db
+      AUTH_SERVICE_URL: http://auth-service:8000
+      CATALOG_SERVICE_URL: http://catalog-service:4000
+    ports:
+      - "127.0.0.1:8003:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      catalog-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/healthz')"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build: ./frontend
+    container_name: meridian-frontend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      - auth-service
+      - catalog-service
+      - orders-service
+
+volumes:
+  postgres-data:

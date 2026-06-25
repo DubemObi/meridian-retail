@@ -1,0 +1,49 @@
+# .github/workflows/ci.yml
+# Meridian Retail Group — CI Pipeline
+# Runs on every push and pull request. Builds all four images to confirm
+# they build successfully. Does NOT push or deploy — that is deploy.yml,
+# which only runs on push to main.
+
+name: CI — Build and Test
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-auth-service:
+    name: Test Auth Service
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: |
+          cd auth-service
+          pip install -r requirements.txt
+          pip install pytest httpx
+
+  test-catalog-service:
+    name: Test Catalog Service
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: |
+          cd catalog-service
+          npm ci
+
+  build-images:
+    name: Build All Images (no push)
+    runs-on: ubuntu-latest
+    needs: [test-auth-service, test-catalog-service]
+    strategy:
+      matrix:
+        service: [auth-service, catalog-service, orders-service, frontend]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build ${{ matrix.service }}
+        run: docker build -t meridian-${{ matrix.service }}:ci-test ./${{ matrix.service }}
