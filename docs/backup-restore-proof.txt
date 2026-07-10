@@ -1,0 +1,188 @@
+Script started on 2026-07-10 13:09:27+00:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="157" LINES="43"]
+^[[?2004h^[]0;ubuntu@ip-172-31-33-102: ~/meridian-retail^G^[[01;32mubuntu@ip-172-31-33-102^[[00m:^[[01;34m~/meridian-retail^[[00m$ docker ^H^[[K exec -it ^H>
+^[[?2004l^Mpsql (16.14)
+Type "help" for help.
+
+meridian_db=# SELECT * FROM products ^M^[[37G;
+ id |   sku   |          name          |                 description                  | price | stock |  category   |         created_at
+----+---------+------------------------+----------------------------------------------+-------+-------+-------------+----------------------------
+  2 | MRD-002 | Leather Sandals        | Genuine leather, handmade                    | 39.99 |    85 | Footwear    | 2026-07-05 08:18:57.063381
+  3 | MRD-003 | Beaded Necklace Set    | Three-piece beaded jewellery set             | 18.50 |   200 | Jewellery   | 2026-07-05 08:18:57.065423
+  4 | MRD-004 | Kente Cloth Scarf      | Premium woven scarf                          | 32.00 |    60 | Accessories | 2026-07-05 08:18:57.067344
+  5 | MRD-005 | Shea Butter Body Cream | 100% organic, 250ml                          | 12.99 |   300 | Beauty      | 2026-07-05 08:18:57.069178
+  1 | MRD-001 | Ankara Print Tote Bag  | Handwoven cotton tote with traditional print | 24.99 |   118 | Bags        | 2026-07-05 08:18:57.060887
+(5 rows)
+
+meridian_db=# INSERT INTO products (sku, name, description, price, stock, category)
+meridian_db-# VALUES (
+meridian_db(#   'MRD-999',
+meridian_db(#   'DevOps Test Product',
+meridian_db(#   'Temporary product for backup verification',
+meridian_db(#   99.99,
+meridian_db(#   10,
+meridian_db(#   'Testing'
+meridian_db(# );^M^[[15GSELECT * FROM products;^M^[[15G);^[[K^H^H^G^G^G^G);
+INSERT 0 1
+meridian_db=# ^M^[[15GINSERT INTO products (sku, name, description, price, stock, category)
+VALUES (
+  'MRD-999',
+  'DevOps Test Product',
+  'Temporary product for backup verification',
+  99.99,
+  10,
+  'Testing'
+);^M^[[8A^[[15GSELECT * FROM products;^[[K
+^[[K
+^[[K
+^[[K
+^[[K
+^[[K
+^[[K
+^[[K
+^[[K^[[8A^[[38G
+ id |   sku   |          name          |                 description                  | price | stock |  category   |         created_at
+----+---------+------------------------+----------------------------------------------+-------+-------+-------------+----------------------------
+  2 | MRD-002 | Leather Sandals        | Genuine leather, handmade                    | 39.99 |    85 | Footwear    | 2026-07-05 08:18:57.063381
+  3 | MRD-003 | Beaded Necklace Set    | Three-piece beaded jewellery set             | 18.50 |   200 | Jewellery   | 2026-07-05 08:18:57.065423
+  4 | MRD-004 | Kente Cloth Scarf      | Premium woven scarf                          | 32.00 |    60 | Accessories | 2026-07-05 08:18:57.067344
+  5 | MRD-005 | Shea Butter Body Cream | 100% organic, 250ml                          | 12.99 |   300 | Beauty      | 2026-07-05 08:18:57.069178
+  1 | MRD-001 | Ankara Print Tote Bag  | Handwoven cotton tote with traditional print | 24.99 |   118 | Bags        | 2026-07-05 08:18:57.060887
+  8 | MRD-999 | DevOps Test Product    | Temporary product for backup verification    | 99.99 |    10 | Testing     | 2026-07-10 13:12:03.965456
+(6 rows)
+
+meridian_db=# \q
+^[[?2004h^[]0;ubuntu@ip-172-31-33-102: ~/meridian-retail^G^[[01;32mubuntu@ip-172-31-33-102^[[00m:^[[01;34m~/meridian-retail^[[00m$ ./scripts/r^H^[[Kbas^H^[[>
+^[[?2004l^M[Fri Jul 10 13:12:44 UTC 2026] Starting backup...
+[Fri Jul 10 13:12:44 UTC 2026] Backup successful: /home/ubuntu/backups/meridian/meridian_db_2026-07-10_13-12-44.sql.gz (4.0K)
+[Fri Jul 10 13:12:44 UTC 2026] Cleaned up backups older than 7 days
+[Fri Jul 10 13:12:44 UTC 2026] Current backups:
+total 12K
+-rw-rw-r-- 1 ubuntu ubuntu 1.8K Jul 10 10:46 meridian_db_2026-07-10_10-46-36.sql.gz
+-rw-rw-r-- 1 ubuntu ubuntu 1.9K Jul 10 12:24 meridian_db_2026-07-10_12-24-14.sql.gz
+-rw-rw-r-- 1 ubuntu ubuntu 2.0K Jul 10 13:12 meridian_db_2026-07-10_13-12-44.sql.gz
+^[[?2004h^[]0;ubuntu@ip-172-31-33-102: ~/meridian-retail^G^[[01;32mubuntu@ip-172-31-33-102^[[00m:^[[01;34m~/meridian-retail^[[00m$ ./scripts/backup_db.sh ^H>
+^[[?2004l^Mpsql (16.14)
+Type "help" for help.
+
+meridian_db=# ^M^[[15G\q^M^[[15GSELECT * FROM products;
+ id |   sku   |          name          |                 description                  | price | stock |  category   |         created_at
+----+---------+------------------------+----------------------------------------------+-------+-------+-------------+----------------------------
+  2 | MRD-002 | Leather Sandals        | Genuine leather, handmade                    | 39.99 |    85 | Footwear    | 2026-07-05 08:18:57.063381
+  3 | MRD-003 | Beaded Necklace Set    | Three-piece beaded jewellery set             | 18.50 |   200 | Jewellery   | 2026-07-05 08:18:57.065423
+  4 | MRD-004 | Kente Cloth Scarf      | Premium woven scarf                          | 32.00 |    60 | Accessories | 2026-07-05 08:18:57.067344
+  5 | MRD-005 | Shea Butter Body Cream | 100% organic, 250ml                          | 12.99 |   300 | Beauty      | 2026-07-05 08:18:57.069178
+  1 | MRD-001 | Ankara Print Tote Bag  | Handwoven cotton tote with traditional print | 24.99 |   118 | Bags        | 2026-07-05 08:18:57.060887
+  8 | MRD-999 | DevOps Test Product    | Temporary product for backup verification    | 99.99 |    10 | Testing     | 2026-07-10 13:12:03.965456
+(6 rows)
+
+meridian_db=# DELETE FROM products
+meridian_db-# WHERE name='DevOps Test Product';
+DELETE 1
+meridian_db=# ^M^[[15GDELETE FROM products
+WHERE name='DevOps Test Product';^M^[[A^[[15GSELECT * FROM products;
+^[[K^[[A^[[38G
+ id |   sku   |          name          |                 description                  | price | stock |  category   |         created_at
+----+---------+------------------------+----------------------------------------------+-------+-------+-------------+----------------------------
+  2 | MRD-002 | Leather Sandals        | Genuine leather, handmade                    | 39.99 |    85 | Footwear    | 2026-07-05 08:18:57.063381
+  3 | MRD-003 | Beaded Necklace Set    | Three-piece beaded jewellery set             | 18.50 |   200 | Jewellery   | 2026-07-05 08:18:57.065423
+  4 | MRD-004 | Kente Cloth Scarf      | Premium woven scarf                          | 32.00 |    60 | Accessories | 2026-07-05 08:18:57.067344
+  5 | MRD-005 | Shea Butter Body Cream | 100% organic, 250ml                          | 12.99 |   300 | Beauty      | 2026-07-05 08:18:57.069178
+  1 | MRD-001 | Ankara Print Tote Bag  | Handwoven cotton tote with traditional print | 24.99 |   118 | Bags        | 2026-07-05 08:18:57.060887
+(5 rows)
+
+meridian_db=# \q
+^[[?2004h^[]0;ubuntu@ip-172-31-33-102: ~/meridian-retail^G^[[01;32mubuntu@ip-172-31-33-102^[[00m:^[[01;34m~/meridian-retail^[[00m$ ./scripts/restore_db.sh ^>
+^[[?2004l^MWARNING: This will overwrite the current meridian_db database.
+Type 'yes' to continue: yes
+Restoring from /home/ubuntu/backups/meridian/meridian_db_2026-07-10_13-12-44.sql.gz...
+NOTICE:  drop cascades to 3 other objects
+DETAIL:  drop cascades to table orders
+drop cascades to table products
+drop cascades to table users
+DROP SCHEMA
+CREATE SCHEMA
+SET
+SET
+SET
+SET
+SET
+ set_config
+------------
+
+(1 row)
+
+SET
+SET
+SET
+SET
+ALTER SCHEMA
+COMMENT
+SET
+SET
+CREATE TABLE
+ALTER TABLE
+CREATE SEQUENCE
+ALTER SEQUENCE
+ALTER SEQUENCE
+CREATE TABLE
+ALTER TABLE
+CREATE SEQUENCE
+ALTER SEQUENCE
+ALTER SEQUENCE
+CREATE TABLE
+ALTER TABLE
+CREATE SEQUENCE
+ALTER SEQUENCE
+ALTER SEQUENCE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+COPY 1
+COPY 6
+COPY 2
+ setval
+--------
+      1
+(1 row)
+
+ setval
+--------
+      8
+(1 row)
+
+ setval
+--------
+      2
+(1 row)
+
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+REVOKE
+Restore complete. Verify with:
+  docker exec -it meridian-postgres psql -U meridian -d meridian_db -c '\dt'
+^[[?2004h^[]0;ubuntu@ip-172-31-33-102: ~/meridian-retail^G^[[01;32mubuntu@ip-172-31-33-102^[[00m:^[[01;34m~/meridian-retail^[[00m$ ./scripts/restore_db.sh />
+^[[?2004l^Mpsql (16.14)
+Type "help" for help.
+
+meridian_db=# ^M^[[15G\q^M^[[15GSELECT * FROM products;
+ id |   sku   |          name          |                 description                  | price | stock |  category   |         created_at
+----+---------+------------------------+----------------------------------------------+-------+-------+-------------+----------------------------
+  2 | MRD-002 | Leather Sandals        | Genuine leather, handmade                    | 39.99 |    85 | Footwear    | 2026-07-05 08:18:57.063381
+  3 | MRD-003 | Beaded Necklace Set    | Three-piece beaded jewellery set             | 18.50 |   200 | Jewellery   | 2026-07-05 08:18:57.065423
+  4 | MRD-004 | Kente Cloth Scarf      | Premium woven scarf                          | 32.00 |    60 | Accessories | 2026-07-05 08:18:57.067344
+  5 | MRD-005 | Shea Butter Body Cream | 100% organic, 250ml                          | 12.99 |   300 | Beauty      | 2026-07-05 08:18:57.069178
+  1 | MRD-001 | Ankara Print Tote Bag  | Handwoven cotton tote with traditional print | 24.99 |   118 | Bags        | 2026-07-05 08:18:57.060887
+  8 | MRD-999 | DevOps Test Product    | Temporary product for backup verification    | 99.99 |    10 | Testing     | 2026-07-10 13:12:03.965456
+(6 rows)
+
+meridian_db=# \q
+^[[?2004h^[]0;ubuntu@ip-172-31-33-102: ~/meridian-retail^G^[[01;32mubuntu@ip-172-31-33-102^[[00m:^[[01;34m~/meridian-retail^[[00m$ exit
+^[[?2004l^Mexit
+
+Script done on 2026-07-10 13:15:05+00:00 [COMMAND_EXIT_CODE="0"]

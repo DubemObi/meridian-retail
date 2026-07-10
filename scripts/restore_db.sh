@@ -27,6 +27,9 @@ fi
 
 echo "Restoring from $BACKUP_FILE..."
 
+
+docker exec meridian-postgres psql -U meridian -d meridian_db -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+
 gunzip -c "$BACKUP_FILE" | docker exec -i meridian-postgres psql -U meridian -d meridian_db
 
 echo "Restore complete. Verify with:"
