@@ -1,4 +1,4 @@
-# Meridian Retail Group — Reverse Proxy & Multi-Service DevOps Foundations CI Test
+# Meridian Retail Group — Reverse Proxy & Multi-Service DevOps Foundations
 
 **Amdari Internship Programme | DevOps Track — Beginner**
 
